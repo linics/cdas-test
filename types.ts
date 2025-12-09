@@ -25,6 +25,7 @@ export interface Assignment {
   difficulty: Difficulty;
   content: AssignmentContent;
   created_at: string;
+  standards_ref?: string;
 }
 
 export interface FeedbackDimensions {
@@ -48,4 +49,13 @@ export interface Submission {
   image_url?: string; // In this demo, this will be a base64 string
   ai_evaluation?: AIEvaluation;
   created_at: string;
+}
+
+// New type for file staging area
+export interface StagedFile {
+  id: string;
+  file: File;
+  status: 'pending' | 'parsing' | 'success' | 'error';
+  content?: string;
+  errorMessage?: string;
 }

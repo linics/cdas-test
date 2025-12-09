@@ -3,6 +3,7 @@ import { Assignment, Submission } from "../types";
 // Key constants
 const STORAGE_KEY_ASSIGNMENTS = "cdas_assignments";
 const STORAGE_KEY_SUBMISSIONS = "cdas_submissions";
+const STORAGE_KEY_CUSTOM_KB = "cdas_custom_knowledge_base"; // New key for KB
 
 // --- Mock Assignments Table ---
 
@@ -46,4 +47,27 @@ export const getSubmissions = (): Submission[] => {
 export const getSubmissionsByAssignmentId = (assignmentId: string): Submission[] => {
   const submissions = getSubmissions();
   return submissions.filter((s) => s.assignment_id === assignmentId);
+};
+
+// --- Custom Knowledge Base Persistence ---
+
+export const saveCustomKnowledgeBase = (content: string, fileName: string): void => {
+  // Simple compression by limiting length if needed, but for now assuming users don't upload books.
+  // In a real heavy app, we'd use IndexedDB.
+  const data = { content, fileName, updatedAt: new Date().toISOString() };
+  try {
+    localStorage.setItem(STORAGE_KEY_CUSTOM_KB, JSON.stringify(data));
+  } catch (e) {
+    console.error("Storage limit reached", e);
+    alert("知识库内容过大，无法保存到本地缓存。建议减少文件数量。");
+  }
+};
+
+export const getCustomKnowledgeBase = (): { content: string; fileName: string; updatedAt: string } | null => {
+  const stored = localStorage.getItem(STORAGE_KEY_CUSTOM_KB);
+  return stored ? JSON.parse(stored) : null;
+};
+
+export const clearCustomKnowledgeBase = (): void => {
+  localStorage.removeItem(STORAGE_KEY_CUSTOM_KB);
 };

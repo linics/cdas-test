@@ -38,11 +38,12 @@ const assignmentSchema: Schema = {
 export const generateAssignment = async (
   topic: string,
   subjects: string[],
-  difficulty: string
+  difficulty: string,
+  kbContent?: string
 ): Promise<AssignmentContent> => {
   const model = "gemini-2.5-flash";
   
-  const prompt = `
+  let prompt = `
     Role: You are an expert educational designer specializing in Phenomenon-based Learning (PBL).
     Task: Create a cross-disciplinary homework assignment.
     
@@ -50,7 +51,18 @@ export const generateAssignment = async (
     - Topic: ${topic}
     - Subjects: ${subjects.join(", ")}
     - Difficulty: ${difficulty}
+  `;
 
+  if (kbContent) {
+    prompt += `\n
+    Reference Material (Standards/Knowledge Base):
+    ${kbContent}
+    
+    Instruction: Incorporate the key concepts and standards from the provided Reference Material into the assignment design.
+    `;
+  }
+
+  prompt += `
     Requirements:
     1. Language: All generated content (Title, Scenario, Tasks, Criteria) MUST be in Simplified Chinese (zh-CN).
     2. Deep Integration: Do not just list questions. Create a scenario that requires knowledge from all selected subjects to solve.
