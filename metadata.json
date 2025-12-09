@@ -1,0 +1,5 @@
+{
+  "name": "CDAS - 跨学科智能体系统",
+  "description": "一个基于现象式学习 (PBL) 的平台，AI 智能体生成跨学科作业并为学生的提交提供多模态反馈。",
+  "requestFramePermissions": []
+}
